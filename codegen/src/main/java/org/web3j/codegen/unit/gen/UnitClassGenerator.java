@@ -12,6 +12,9 @@
  */
 package org.web3j.codegen.unit.gen;
 
+/**
+ * 单元类生成器
+ */
 public interface UnitClassGenerator {
 
     void writeClass() throws Exception;

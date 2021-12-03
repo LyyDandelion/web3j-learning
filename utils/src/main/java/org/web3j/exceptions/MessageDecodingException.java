@@ -12,7 +12,10 @@
  */
 package org.web3j.exceptions;
 
-/** Encoding exception. */
+/**
+ *  Dncoding exception.
+ *  解码异常
+ * */
 public class MessageDecodingException extends RuntimeException {
     public MessageDecodingException(String message) {
         super(message);

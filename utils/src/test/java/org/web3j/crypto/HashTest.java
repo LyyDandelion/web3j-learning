@@ -93,7 +93,7 @@ public class HashTest {
         assertEquals(
                 Hash.sha3String(""),
                 ("0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"));
-
+        System.out.println("deposit(uint256):"+Hash.sha3String("deposit(uint256)"));
         assertEquals(
                 Hash.sha3String("EVWithdraw(address,uint256,bytes32)"),
                 ("0x953d0c27f84a9649b0e121099ffa9aeb7ed83e65eaed41d3627f895790c72d41"));

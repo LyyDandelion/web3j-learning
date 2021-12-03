@@ -58,8 +58,9 @@ public class Hash {
     /**
      * Keccak-256 hash function.
      *
-     * @param hexInput hex encoded input data with optional 0x prefix
-     * @return hash value as hex encoded string
+     * Keccak-256 哈希函数
+     * @param hexInput hex encoded input data with optional 0x prefix  输入 带 0x 前缀的16进制编码数据
+     * @return hash value as hex encoded string 返回16进制的字符串
      */
     public static String sha3(String hexInput) {
         byte[] bytes = Numeric.hexStringToByteArray(hexInput);
@@ -69,11 +70,11 @@ public class Hash {
 
     /**
      * Keccak-256 hash function.
-     *
-     * @param input binary encoded input data
-     * @param offset of start of data
-     * @param length of data
-     * @return hash value
+     * Keccak-256 哈希函数
+     * @param input binary encoded input data 输入二进制数据
+     * @param offset of start of data 开始
+     * @param length of data 长度
+     * @return hash value hash值
      */
     public static byte[] sha3(byte[] input, int offset, int length) {
         Keccak.DigestKeccak kecc = new Keccak.Digest256();
@@ -83,9 +84,9 @@ public class Hash {
 
     /**
      * Keccak-256 hash function.
-     *
-     * @param input binary encoded input data
-     * @return hash value
+     * Keccak-256 哈希函数
+     * @param input binary encoded input data 输入二进制数据
+     * @return hash value   hash值
      */
     public static byte[] sha3(byte[] input) {
         return sha3(input, 0, input.length);
@@ -93,9 +94,13 @@ public class Hash {
 
     /**
      * Keccak-256 hash function that operates on a UTF-8 encoded String.
+     *Keccak-256 哈希函数，针对UTF-8 字符串处理
      *
-     * @param utf8String UTF-8 encoded string
-     * @return hash value as hex encoded string
+     * 例如：deposit(uint256)  编码处理后得到 0xb6b55f256c3eb337f96418d59e773db6e805074f5e574a2bebb7d71394043619
+     * 前4个字节就代表了这个函数 “b6b55f25”
+     *
+     * @param utf8String UTF-8 encoded string UTF-8编码字符串
+     * @return hash value as hex encoded string hash值
      */
     public static String sha3String(String utf8String) {
         return Numeric.toHexString(sha3(utf8String.getBytes(StandardCharsets.UTF_8)));
@@ -103,9 +108,9 @@ public class Hash {
 
     /**
      * Generates SHA-256 digest for the given {@code input}.
-     *
-     * @param input The input to digest
-     * @return The hash value for the given input
+     * 给定的输入数据生成 SHA-256消息摘要
+     * @param input The input to digest 输入的摘要
+     * @return The hash value for the given input 给定输入的hash值
      * @throws RuntimeException If we couldn't find any SHA-256 provider
      */
     public static byte[] sha256(byte[] input) {
@@ -137,11 +142,12 @@ public class Hash {
 
     /**
      * Blake2-256 hash function.
-     *
-     * @param input binary encoded input data
-     * @return hash value
+     * Blake2-256 哈希函数
+     * @param input binary encoded input data 输入二进制数据
+     * @return hash value 返回hash值
      */
     public static byte[] blake2b256(byte[] input) {
         return new Blake2b.Blake2b256().digest(input);
     }
+
 }

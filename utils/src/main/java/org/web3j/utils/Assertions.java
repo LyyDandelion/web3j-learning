@@ -12,14 +12,17 @@
  */
 package org.web3j.utils;
 
-/** Assertion utility functions. */
+/**
+ * Assertion utility functions.
+ * 断言作用函数
+ * */
 public class Assertions {
 
     /**
      * Verify that the provided precondition holds true.
-     *
-     * @param assertionResult assertion value
-     * @param errorMessage error message if precondition failure
+     * 校验前置条件是否正确
+     * @param assertionResult assertion value 断言值
+     * @param errorMessage error message if precondition failure 前置条件错误抛错错误信息
      */
     public static void verifyPrecondition(boolean assertionResult, String errorMessage) {
         if (!assertionResult) {
