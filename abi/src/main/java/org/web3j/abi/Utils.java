@@ -36,16 +36,31 @@ import org.web3j.abi.datatypes.Ufixed;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 
-/** Utility functions. */
+/**
+ *
+ * 工具包
+ *
+ * */
 public class Utils {
+    //空构造
     private Utils() {}
 
+
+    /**
+     * 获取类型名称
+     * @param typeReference 类型参考
+     * @param <T>
+     * @return
+     */
     static <T extends Type> String getTypeName(TypeReference<T> typeReference) {
         try {
+            //获取类型
             java.lang.reflect.Type reflectedType = typeReference.getType();
 
             Class<?> type;
+            //是否为参数化类型
             if (reflectedType instanceof ParameterizedType) {
+                //获取变量类型
                 type = (Class<?>) ((ParameterizedType) reflectedType).getRawType();
                 return getParameterizedTypeName(typeReference, type);
             } else {
@@ -57,9 +72,17 @@ public class Utils {
         }
     }
 
+
+    /**
+     * 获取数据类型简写名称
+     * @param type
+     * @return
+     */
     static String getSimpleTypeName(Class<?> type) {
+        //类型简写，小写
         String simpleName = type.getSimpleName().toLowerCase();
 
+        //uint int  Ufixed Fixed( 定长/不定长浮点类型)
         if (type.equals(Uint.class)
                 || type.equals(Int.class)
                 || type.equals(Ufixed.class)
@@ -76,41 +99,55 @@ public class Utils {
         }
     }
 
+    //获取参数化类型名称
     static <T extends Type, U extends Type> String getParameterizedTypeName(
             TypeReference<T> typeReference, Class<?> type) {
 
         try {
+            //是否为动态数组类型
             if (type.equals(DynamicArray.class)) {
+                //从数组中获取参数化类型
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
+                //获取简化类型名
                 String parameterizedTypeName = getSimpleTypeName(parameterizedType);
+                //返回参数类型，然后再补上[]格式
                 return parameterizedTypeName + "[]";
-            } else if (type.equals(StaticArray.class)) {
+            } else if (type.equals(StaticArray.class)) { //是否为静态数组类型
+                //从数组中获取参数化类型
                 Class<U> parameterizedType = getParameterizedTypeFromArray(typeReference);
+                //从数组中获取参数化类型
                 String parameterizedTypeName = getSimpleTypeName(parameterizedType);
+
+                //括号内补上大小
                 return parameterizedTypeName
                         + "["
                         + ((TypeReference.StaticArrayTypeReference) typeReference).getSize()
                         + "]";
             } else {
+                //抛出非法类型
                 throw new UnsupportedOperationException("Invalid type provided " + type.getName());
             }
         } catch (ClassNotFoundException e) {
+            //抛出非法类型参考
             throw new UnsupportedOperationException("Invalid class reference provided", e);
         }
     }
 
+    //从数组类型获取参数化类型
     @SuppressWarnings("unchecked")
     static <T extends Type> Class<T> getParameterizedTypeFromArray(TypeReference typeReference)
             throws ClassNotFoundException {
 
         java.lang.reflect.Type type = typeReference.getType();
+        //返回类型数组
         java.lang.reflect.Type[] typeArguments =
                 ((ParameterizedType) type).getActualTypeArguments();
-
+        //获取第一个值的类型名
         String parameterizedTypeName = typeArguments[0].getTypeName();
         return (Class<T>) Class.forName(parameterizedTypeName);
     }
 
+    //转换 列表类型
     @SuppressWarnings("unchecked")
     public static List<TypeReference<Type>> convert(List<TypeReference<?>> input) {
         List<TypeReference<Type>> result = new ArrayList<>(input.size());
@@ -121,13 +158,23 @@ public class Utils {
         return result;
     }
 
+
+    /**
+     *
+     * 类型映射
+     * @param input  输入列表数据
+     * @param outerDestType 外部定义类型
+     * @param innerType 内部类型
+     */
     public static <T, R extends Type<T>, E extends Type<T>> List<E> typeMap(
             List<List<T>> input, Class<E> outerDestType, Class<R> innerType) {
         List<E> result = new ArrayList<>();
         try {
+            //返回构造器（包括public 、非public 、 private
             Constructor<E> constructor =
                     outerDestType.getDeclaredConstructor(Class.class, List.class);
             for (List<T> ts : input) {
+                //创建实例
                 E e = constructor.newInstance(innerType, typeMap(ts, innerType));
                 result.add(e);
             }
@@ -147,9 +194,11 @@ public class Utils {
 
         if (!input.isEmpty()) {
             try {
+                //获取构造函数
                 Constructor<R> constructor =
                         destType.getDeclaredConstructor(input.get(0).getClass());
                 for (T value : input) {
+                    //创建实例加入list
                     result.add(constructor.newInstance(value));
                 }
             } catch (NoSuchMethodException
@@ -163,6 +212,15 @@ public class Utils {
     }
 
     /**
+     *
+     * 返回静态结构中规范字段的列表。
+     * 示例：
+     * struct Baz {
+     *  Struct Bar { int a, int b },
+     *  int c
+     *
+     * } 将返回 {a, b, c}。
+     *
      * Returns flat list of canonical fields in a static struct. Example: struct Baz { Struct Bar {
      * int a, int b }, int c } will return {a, b, c}.
      *
@@ -176,14 +234,18 @@ public class Utils {
     }
 
     /**
+     *
+     * 遍历静态结构并递归枚举其所有字段和嵌套结构字段。
+     *
      * Goes over a static structs and enumerates all of its fields and nested structs fields
      * recursively.
      *
-     * @param classType Static struct type
+     * @param classType Static struct type  静态结构
      * @return Flat list of all the fields nested in the struct
      */
     @SuppressWarnings("unchecked")
     public static List<Field> staticStructsNestedFieldsFlatList(Class<Type> classType) {
+        //classType.getDeclaredFields()获得所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段
         List<Field> canonicalFields =
                 Arrays.stream(classType.getDeclaredFields())
                         .filter(field -> !StaticStruct.class.isAssignableFrom(field.getType()))

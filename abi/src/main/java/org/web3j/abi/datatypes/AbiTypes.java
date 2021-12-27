@@ -137,9 +137,11 @@ public final class AbiTypes {
     }
 
     /**
+     * 返回对应的web3j数据类型
+     *
      * Returns the web3j data type for the given type.
      *
-     * @param type A Solidity type.
+     * @param type A Solidity type. （solidity类型
      * @param primitives Use Java primitive types to wrap contract parameters.
      * @return The web3j Java class to represent this Solidity type.
      */

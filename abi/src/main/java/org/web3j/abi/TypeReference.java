@@ -22,7 +22,14 @@ import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.StaticArray;
 
 /**
+ *
+ *
+ * 类型封装器 绕过java类型擦除限制
+ *
  * Type wrapper to get around limitations of Java's type erasure. This is so that we can pass around
+ *
+ *
+ *
  * Typed {@link org.web3j.abi.datatypes.Array} types.
  *
  * <p>See <a href="http://gafter.blogspot.com.au/2006/12/super-type-tokens.html">this blog post</a>
@@ -34,9 +41,14 @@ import org.web3j.abi.datatypes.StaticArray;
  */
 public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         implements Comparable<TypeReference<T>> {
+    //数组后缀匹配
     protected static Pattern ARRAY_SUFFIX = Pattern.compile("\\[(\\d*)]");
 
+    //类型，Type是所有类型的父接口
+    // 如原始类型(raw types 对应 Class)、 参数化类型(parameterized types 对应 ParameterizedType)、 数组类型(array types 对应 GenericArrayType)、 类型变量(type variables 对应 TypeVariable )和基本(原生)类型(primitive types 对应 Class)
     private final Type type;
+
+    // TODO: 2021/12/27 0027
     private final boolean indexed;
 
     protected TypeReference() {
@@ -44,15 +56,29 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     }
 
     protected TypeReference(boolean indexed) {
+        //获得带有泛型的父类
         Type superclass = getClass().getGenericSuperclass();
+
         if (superclass instanceof Class) {
             throw new RuntimeException("Missing type parameter.");
         }
+
+        //获取参数化类型
         this.type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+        // TODO: 2021/12/27 0027
         this.indexed = indexed;
     }
 
     /**
+     *
+     *  使用 getSubTypeReference()实例化类型， 来查看这个 TypeReference 封装的是什么
+     *
+     *  例如，在 DynamicArray[StaticArray3[Uint256]] 的 TypeReference 上调用 getSubTypeReference() 将返回
+     *  参考类型 的 StaticArray3[Uint256]
+     *
+     *
+     * * DynamicArray[StaticArray3[Uint256]]将返回一个typerreference到StaticArray3[Uint256]
+     *
      * getSubTypeReference() is used by instantiateType to see what TypeReference is wrapped by this
      * one. eg calling getSubTypeReference() on a TypeReference to
      * DynamicArray[StaticArray3[Uint256]] would return a TypeReference to StaticArray3[Uint256]
@@ -68,16 +94,21 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         // type parameter is left out.
         return 0;
     }
-
+    
+    //获取类型对象
     public Type getType() {
         return type;
     }
 
+    // TODO: 2021/12/27 0027  
     public boolean isIndexed() {
         return indexed;
     }
 
     /**
+     *
+     * 确保类型不会因擦除而返回为 T 的解决方法，这使您可以通过创建 TypeReference
+     *
      * Workaround to ensure type does not come back as T due to erasure, this enables you to create
      * a TypeReference via {@link Class Class&lt;T&gt;}.
      *
@@ -87,7 +118,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     @SuppressWarnings("unchecked")
     public Class<T> getClassType() throws ClassNotFoundException {
         Type clsType = getType();
-
+        //是否为参数化类型
         if (getType() instanceof ParameterizedType) {
             return (Class<T>) ((ParameterizedType) clsType).getRawType();
         } else {
@@ -95,10 +126,11 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         }
     }
 
+
     public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(Class<T> cls) {
         return create(cls, false);
     }
-
+    //TypeReference对象创建
     public static <T extends org.web3j.abi.datatypes.Type> TypeReference<T> create(
             Class<T> cls, boolean indexed) {
         return new TypeReference<T>(indexed) {
@@ -109,26 +141,32 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
     }
 
     /**
+     *
+     * 这是一个仅适用于原子类型（uint、字节等）的辅助方法。数组类型必须由 {@link java.lang.reflect.ParameterizedType} 封装。
+     *
      * This is a helper method that only works for atomic types (uint, bytes, etc). Array types must
      * be wrapped by a {@link java.lang.reflect.ParameterizedType}.
      *
-     * @param solidityType the solidity as a string eg Address Int
-     * @param primitives is it a primitive type
+     * @param solidityType the solidity as a string eg Address Int  （solidity类型，Address Int）
+     * @param primitives is it a primitive type (是否原始类型）
      * @return returns
      * @throws ClassNotFoundException when the class cannot be found.
      */
     protected static Class<? extends org.web3j.abi.datatypes.Type> getAtomicTypeClass(
             String solidityType, boolean primitives) throws ClassNotFoundException {
 
+        //不适用数组类型
         if (ARRAY_SUFFIX.matcher(solidityType).find()) {
             throw new ClassNotFoundException(
                     "getAtomicTypeClass does not work with array types."
                             + " See makeTypeReference()");
         } else {
+            //获取对应web3j类型
             return AbiTypes.getType(solidityType, primitives);
         }
     }
 
+    // TODO: 2021/12/27 0027  
     public abstract static class StaticArrayTypeReference<T extends org.web3j.abi.datatypes.Type>
             extends TypeReference<T> {
 
@@ -148,6 +186,7 @@ public abstract class TypeReference<T extends org.web3j.abi.datatypes.Type>
         return makeTypeReference(solidityType, false, false);
     }
 
+    // TODO: 2021/12/27 0027  
     public static TypeReference makeTypeReference(
             String solidityType, final boolean indexed, final boolean primitives)
             throws ClassNotFoundException {

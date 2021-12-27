@@ -12,6 +12,10 @@
  */
 package org.web3j.abi;
 
+
+/**
+ * 类型映射异常
+ */
 public class TypeMappingException extends RuntimeException {
 
     public TypeMappingException(Exception e) {

@@ -14,7 +14,11 @@ package org.web3j.abi.datatypes;
 
 import java.util.List;
 
-/** Dynamic array type. */
+/** Dynamic array type.
+ *
+ * 动态数组类型
+ *
+ * @param <T>*/
 public class DynamicArray<T extends Type> extends Array<T> {
 
     @Deprecated
