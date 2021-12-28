@@ -14,7 +14,11 @@ package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
 
-/** Common numeric type. */
+/**
+ * 常见数值类型
+ * Common numeric type.
+ *
+ * */
 public abstract class NumericType implements Type<BigInteger> {
 
     private String type;

@@ -12,7 +12,10 @@
  */
 package org.web3j.abi.datatypes;
 
-/** Boolean type. */
+/**
+ * 布尔类型
+ * Boolean type.
+ * */
 public class Bool implements Type<Boolean> {
 
     public static final String TYPE_NAME = "bool";

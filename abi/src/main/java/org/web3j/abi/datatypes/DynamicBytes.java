@@ -12,7 +12,10 @@
  */
 package org.web3j.abi.datatypes;
 
-/** Dynamically allocated sequence of bytes. */
+/**
+ * 动态分配的字节序列。
+ * Dynamically allocated sequence of bytes.
+ * */
 public class DynamicBytes extends BytesType {
 
     public static final String TYPE_NAME = "bytes";

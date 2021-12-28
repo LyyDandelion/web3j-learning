@@ -17,7 +17,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-/** Fixed size array. */
+/**
+ * 固定大小的数组。
+ * Fixed size array.
+ *
+ * */
 public abstract class Array<T extends Type> implements Type<List<T>> {
 
     private final Class<T> type;

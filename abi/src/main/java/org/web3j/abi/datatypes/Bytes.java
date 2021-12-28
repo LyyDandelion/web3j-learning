@@ -12,7 +12,10 @@
  */
 package org.web3j.abi.datatypes;
 
-/** Statically allocated sequence of bytes. */
+/**
+ *
+ * 静态分配的字节序列
+ * */
 public class Bytes extends BytesType {
 
     public static final String TYPE_NAME = "bytes";

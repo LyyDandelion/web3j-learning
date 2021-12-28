@@ -39,14 +39,19 @@ import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
 import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
 
 /**
+ * 类型的以太坊合约应用程序二进制接口 (ABI) 编码。
+ *
+ * 详细信息 参考：https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
  * Ethereum Contract Application Binary Interface (ABI) encoding for types. Further details are
  * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  */
 public class TypeEncoder {
-
+    //私有构造
     private TypeEncoder() {}
 
+    //是否动态
     static boolean isDynamic(Type parameter) {
+        //class.isAssignableFrom ：判断两个类的之间的关联关系，一个类是否可以被强制转换为另外一个实例对象
         return parameter instanceof DynamicBytes
                 || parameter instanceof Utf8String
                 || parameter instanceof DynamicArray
@@ -55,34 +60,40 @@ public class TypeEncoder {
                                 ((StaticArray) parameter).getComponentType()));
     }
 
+    /**
+     * 编码
+     */
     @SuppressWarnings("unchecked")
     public static String encode(Type parameter) {
-        if (parameter instanceof NumericType) {
+
+        if (parameter instanceof NumericType) {//是否为常见数值类型
             return encodeNumeric(((NumericType) parameter));
-        } else if (parameter instanceof Address) {
+        } else if (parameter instanceof Address) { //是否地址类型
             return encodeAddress((Address) parameter);
-        } else if (parameter instanceof Bool) {
+        } else if (parameter instanceof Bool) { //是否布尔类型
             return encodeBool((Bool) parameter);
-        } else if (parameter instanceof Bytes) {
+        } else if (parameter instanceof Bytes) { //是否静态分配的字节序列
             return encodeBytes((Bytes) parameter);
-        } else if (parameter instanceof DynamicBytes) {
+        } else if (parameter instanceof DynamicBytes) { //是否动态分配的字节序列。
             return encodeDynamicBytes((DynamicBytes) parameter);
-        } else if (parameter instanceof Utf8String) {
+        } else if (parameter instanceof Utf8String) { //是否UTF-8 编码的字符串类型。
             return encodeString((Utf8String) parameter);
-        } else if (parameter instanceof StaticArray) {
+        } else if (parameter instanceof StaticArray) { //是否静态数组
+            //class.isAssignableFrom ：判断两个类的之间的关联关系，一个类是否可以被强制转换为另外一个实例对象
             if (DynamicStruct.class.isAssignableFrom(
                     ((StaticArray) parameter).getComponentType())) {
                 return encodeStaticArrayWithDynamicStruct((StaticArray) parameter);
             } else {
                 return encodeArrayValues((StaticArray) parameter);
             }
-        } else if (parameter instanceof DynamicStruct) {
+        } else if (parameter instanceof DynamicStruct) { //是否动态结构
             return encodeDynamicStruct((DynamicStruct) parameter);
-        } else if (parameter instanceof DynamicArray) {
+        } else if (parameter instanceof DynamicArray) { //是否动态数组
             return encodeDynamicArray((DynamicArray) parameter);
-        } else if (parameter instanceof PrimitiveType) {
+        } else if (parameter instanceof PrimitiveType) { //是否原始类型
             return encode(((PrimitiveType) parameter).toSolidityType());
         } else {
+            //抛出不支持类型异常
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
         }
@@ -108,12 +119,16 @@ public class TypeEncoder {
         return result.toString();
     }
 
+    //编码地址
     static String encodeAddress(Address address) {
+        //直接获取address的数值，进行数值类型编码
         return encodeNumeric(address.toUint());
     }
 
+    //编码数值类型
     static String encodeNumeric(NumericType numericType) {
         byte[] rawValue = toByteArray(numericType);
+        //填充数值
         byte paddingValue = getPaddingValue(numericType);
         byte[] paddedRawValue = new byte[MAX_BYTE_LENGTH];
         if (paddingValue != 0) {
@@ -122,13 +137,16 @@ public class TypeEncoder {
             }
         }
 
+        //复制 及0填充 rawValue从0开始全部填充到paddedRawValue， 从MAX_BYTE_LENGTH - rawValue.length开始
         System.arraycopy(
                 rawValue, 0, paddedRawValue, MAX_BYTE_LENGTH - rawValue.length, rawValue.length);
+        //byte数组 转hex（无前缀 0x）
         return Numeric.toHexStringNoPrefix(paddedRawValue);
     }
 
     private static byte getPaddingValue(NumericType numericType) {
-        if (numericType.getValue().signum() == -1) {
+        //signum() 1：正 0：零 -1：负
+        if (numericType.getValue().signum() == -1) {//是否为负数
             return (byte) 0xff;
         } else {
             return 0;
@@ -149,12 +167,15 @@ public class TypeEncoder {
         }
         return value.toByteArray();
     }
-
+    //编码bool类型
     static String encodeBool(Bool value) {
         byte[] rawValue = new byte[MAX_BYTE_LENGTH];
+        //为true
         if (value.getValue()) {
+            //最后一位填充1
             rawValue[rawValue.length - 1] = 1;
         }
+        //byte数组 转hex（无前缀 0x）
         return Numeric.toHexStringNoPrefix(rawValue);
     }
 
