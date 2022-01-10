@@ -18,7 +18,7 @@ package org.web3j.abi.datatypes;
 public interface Type<T> {
     //最大位长度
     int MAX_BIT_LENGTH = 256;
-    //最大字节长度
+    //最大字节长度 32字节
     int MAX_BYTE_LENGTH = MAX_BIT_LENGTH / 8;
     //32字节
     default int bytes32PaddedLength() {

@@ -18,12 +18,18 @@ import org.web3j.abi.TypeReference;
 
 import static org.web3j.abi.Utils.convert;
 
-/** Function type. */
+/**
+ *  Function type.
+ *  函数类型
+ *  */
 public class Function {
+    //函数名称
     private String name;
+    //输入参数
     private List<Type> inputParameters;
+    //输出参数
     private List<TypeReference<Type>> outputParameters;
-
+    //构造
     public Function(
             String name, List<Type> inputParameters, List<TypeReference<?>> outputParameters) {
         this.name = name;

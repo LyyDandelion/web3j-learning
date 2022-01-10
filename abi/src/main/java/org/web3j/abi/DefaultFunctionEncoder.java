@@ -24,7 +24,9 @@ import org.web3j.abi.datatypes.Uint;
 
 import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
 
+//默认函数编码
 public class DefaultFunctionEncoder extends FunctionEncoder {
+
 
     @Override
     public String encodeFunction(final Function function) {

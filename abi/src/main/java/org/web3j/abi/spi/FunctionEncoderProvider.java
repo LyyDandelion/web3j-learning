@@ -16,5 +16,8 @@ import java.util.function.Supplier;
 
 import org.web3j.abi.FunctionEncoder;
 
-/** Function encoding Service Provider Interface. */
+/** Function encoding Service Provider Interface.
+ * 函数编码服务提供者接口。 SPI
+ *
+ * */
 public interface FunctionEncoderProvider extends Supplier<FunctionEncoder> {}

@@ -39,17 +39,19 @@ public abstract class FunctionEncoder {
 
     private static FunctionEncoder DEFAULT_ENCODER;
 
+    //java SPI机制，使用ServiceLoader来加载并实例化类
     private static final ServiceLoader<FunctionEncoderProvider> loader =
             ServiceLoader.load(FunctionEncoderProvider.class);
 
+    //编码函数
     public static String encode(final Function function) {
         return encoder().encodeFunction(function);
     }
-
+    //编码构造器
     public static String encodeConstructor(final List<Type> parameters) {
         return encoder().encodeParameters(parameters);
     }
-
+    //整合成Function
     public static Function makeFunction(
             String fnname,
             List<String> solidityInputTypes,
@@ -68,11 +70,13 @@ public abstract class FunctionEncoder {
         }
         return new Function(fnname, encodedInput, encodedOutput);
     }
-
+    //编码函数
     protected abstract String encodeFunction(Function function);
 
+    //编码参数
     protected abstract String encodeParameters(List<Type> parameters);
 
+    //构建方法签名   如 hello(uint8,bool)
     protected static String buildMethodSignature(
             final String methodName, final List<Type> parameters) {
 
@@ -85,18 +89,19 @@ public abstract class FunctionEncoder {
         result.append(")");
         return result.toString();
     }
-
+    //构建 methodId
     protected static String buildMethodId(final String methodSignature) {
         final byte[] input = methodSignature.getBytes();
         final byte[] hash = Hash.sha3(input);
+        //取前10位
         return Numeric.toHexString(hash).substring(0, 10);
     }
-
+    //执行编码
     private static FunctionEncoder encoder() {
         final Iterator<FunctionEncoderProvider> iterator = loader.iterator();
         return iterator.hasNext() ? iterator.next().get() : defaultEncoder();
     }
-
+    //默认编码
     private static FunctionEncoder defaultEncoder() {
         if (DEFAULT_ENCODER == null) {
             DEFAULT_ENCODER = new DefaultFunctionEncoder();

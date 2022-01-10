@@ -179,22 +179,27 @@ public class TypeEncoder {
         return Numeric.toHexStringNoPrefix(rawValue);
     }
 
+    //编码字节
     static String encodeBytes(BytesType bytesType) {
         byte[] value = bytesType.getValue();
         int length = value.length;
+        //取模
         int mod = length % MAX_BYTE_LENGTH;
 
         byte[] dest;
         if (mod != 0) {
+            //获取填充数量
             int padding = MAX_BYTE_LENGTH - mod;
             dest = new byte[length + padding];
             System.arraycopy(value, 0, dest, 0, length);
         } else {
             dest = value;
         }
+        //转换hex（无前缀）
         return Numeric.toHexStringNoPrefix(dest);
     }
 
+    //编码动态字节类型
     static String encodeDynamicBytes(DynamicBytes dynamicBytes) {
         int size = dynamicBytes.getValue().length;
         String encodedLength = encode(new Uint(BigInteger.valueOf(size)));
