@@ -28,15 +28,18 @@ import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
 public class DefaultFunctionEncoder extends FunctionEncoder {
 
 
+    //编码函数
     @Override
     public String encodeFunction(final Function function) {
+        //获取输入参数列表
         final List<Type> parameters = function.getInputParameters();
-
+        //构建签名方法
         final String methodSignature = buildMethodSignature(function.getName(), parameters);
+        //构建methodId
         final String methodId = buildMethodId(methodSignature);
 
         final StringBuilder result = new StringBuilder();
-        result.append(methodId);
+        result.append(methodId);//将methodId追加进去
 
         return encodeParameters(parameters, result);
     }
@@ -46,6 +49,7 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
         return encodeParameters(parameters, new StringBuilder());
     }
 
+    //编码参数
     private static String encodeParameters(
             final List<Type> parameters, final StringBuilder result) {
 
@@ -53,6 +57,7 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
         final StringBuilder dynamicData = new StringBuilder();
 
         for (Type parameter : parameters) {
+            //类型编码
             final String encodedValue = TypeEncoder.encode(parameter);
 
             if (TypeEncoder.isDynamic(parameter)) {

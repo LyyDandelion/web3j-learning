@@ -21,6 +21,8 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.spi.FunctionReturnDecoderProvider;
 
 /**
+ *
+ * 解码函数或事件调用返回的值。
  * Decodes values returned by function or event calls.
  *
  * <p>Delegates to {@link DefaultFunctionReturnDecoder} unless a {@link
@@ -33,13 +35,13 @@ import org.web3j.abi.spi.FunctionReturnDecoderProvider;
 public abstract class FunctionReturnDecoder {
 
     private static FunctionReturnDecoder DEFAULT_DECODER;
-
+    //SPI 载入示例
     private static final ServiceLoader<FunctionReturnDecoderProvider> loader =
             ServiceLoader.load(FunctionReturnDecoderProvider.class);
 
     /**
      * Decode ABI encoded return values from smart contract function call.
-     *
+     * 从智能合约函数调用中解码 ABI 编码的返回值。
      * @param rawInput ABI encoded input
      * @param outputParameters list of return types as {@link TypeReference}
      * @return {@link List} of values returned by function, {@link Collections#emptyList()} if
@@ -50,6 +52,8 @@ public abstract class FunctionReturnDecoder {
     }
 
     /**
+     *
+     * 解码与事件关联的索引参数。索引参数单独编码, 与根据 ABI 编码的函数参数和返回值编码的非索引参数不同。
      * Decodes an indexed parameter associated with an event. Indexed parameters are individually
      * encoded, unlike non-indexed parameters which are encoded as per ABI-encoded function
      * parameters and return values.

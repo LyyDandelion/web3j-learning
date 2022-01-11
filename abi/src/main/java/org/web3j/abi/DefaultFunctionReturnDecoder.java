@@ -36,16 +36,18 @@ import static org.web3j.abi.Utils.getParameterizedTypeFromArray;
 import static org.web3j.abi.Utils.staticStructNestedPublicFieldsFlatList;
 
 /**
+ * 功能的以太坊合约应用程序二进制接口 (ABI) 编码。
  * Ethereum Contract Application Binary Interface (ABI) encoding for functions. Further details are
  * available <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
  */
 public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
 
+    //解码函数返回结果
     public List<Type> decodeFunctionResult(
             String rawInput, List<TypeReference<Type>> outputParameters) {
-
+        //去掉 0x 前缀
         String input = Numeric.cleanHexPrefix(rawInput);
-
+        //Input为空，直接返还空列表
         if (Strings.isEmpty(input)) {
             return Collections.emptyList();
         } else {
@@ -76,19 +78,21 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
             throw new UnsupportedOperationException("Invalid class reference provided", e);
         }
     }
-
+    //对输入数据进行构造
     private static List<Type> build(String input, List<TypeReference<Type>> outputParameters) {
         List<Type> results = new ArrayList<>(outputParameters.size());
 
         int offset = 0;
         for (TypeReference<?> typeReference : outputParameters) {
             try {
+                //偏移量
                 int hexStringDataOffset = getDataOffset(input, offset, typeReference);
 
                 @SuppressWarnings("unchecked")
-                Class<Type> classType = (Class<Type>) typeReference.getClassType();
+                Class<Type> classType = (Class<Type>) typeReference.getClassType(); //获取类类型
 
                 Type result;
+                //
                 if (DynamicStruct.class.isAssignableFrom(classType)) {
                     result =
                             TypeDecoder.decodeDynamicStruct(
@@ -151,7 +155,7 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
         }
         return results;
     }
-
+    //数据偏移量处理
     public static <T extends Type> int getDataOffset(
             String input, int offset, TypeReference<?> typeReference)
             throws ClassNotFoundException {
