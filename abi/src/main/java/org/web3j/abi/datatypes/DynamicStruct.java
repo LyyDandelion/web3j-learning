@@ -15,7 +15,7 @@ package org.web3j.abi.datatypes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+//动态结构类
 public class DynamicStruct extends DynamicArray<Type> implements StructType {
 
     private final List<Class<Type>> itemTypes = new ArrayList<>();

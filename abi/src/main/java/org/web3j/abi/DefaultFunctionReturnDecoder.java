@@ -92,13 +92,13 @@ public class DefaultFunctionReturnDecoder extends FunctionReturnDecoder {
                 Class<Type> classType = (Class<Type>) typeReference.getClassType(); //获取类类型
 
                 Type result;
-                //
+                //是否为动态结构
                 if (DynamicStruct.class.isAssignableFrom(classType)) {
                     result =
                             TypeDecoder.decodeDynamicStruct(
                                     input, hexStringDataOffset, typeReference);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
-
+                    //是否为动态数组
                 } else if (DynamicArray.class.isAssignableFrom(classType)) {
                     result =
                             TypeDecoder.decodeDynamicArray(

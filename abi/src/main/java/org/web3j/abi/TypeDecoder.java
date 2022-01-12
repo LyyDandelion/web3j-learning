@@ -472,6 +472,7 @@ public class TypeDecoder {
         return decodeDynamicStructElements(input, offset, typeReference, function);
     }
 
+    //解码动态结构元素
     @SuppressWarnings("unchecked")
     private static <T extends Type> T decodeDynamicStructElements(
             final String input,
