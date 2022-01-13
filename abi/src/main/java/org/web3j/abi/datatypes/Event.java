@@ -19,9 +19,14 @@ import org.web3j.abi.TypeReference;
 
 import static org.web3j.abi.Utils.convert;
 
-/** Event wrapper type. */
+/**
+ *  Event wrapper type.
+ *  事件封装类型
+ * */
 public class Event {
+    //事件名
     private String name;
+    //参数列表
     private List<TypeReference<Type>> parameters;
 
     public Event(String name, List<TypeReference<?>> parameters) {

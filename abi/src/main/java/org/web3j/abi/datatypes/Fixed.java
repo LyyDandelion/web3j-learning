@@ -14,7 +14,10 @@ package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
 
-/** Signed fixed type. */
+/**
+ *  Signed fixed type.
+ * fixed类型
+ * */
 public class Fixed extends FixedPointType {
 
     public static final String TYPE_NAME = "fixed";

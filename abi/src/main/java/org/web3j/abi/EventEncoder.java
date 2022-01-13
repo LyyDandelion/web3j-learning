@@ -23,34 +23,42 @@ import org.web3j.utils.Numeric;
 /**
  * Ethereum filter encoding. Further limited details are available <a
  * href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI#events">here</a>.
+ *
+ * 以太坊过滤器编码。
  */
 public class EventEncoder {
 
     private EventEncoder() {}
-
+    //编码
     public static String encode(Event event) {
-
+        //构建方法签名
         String methodSignature = buildMethodSignature(event.getName(), event.getParameters());
-
+        //构建事件签名
         return buildEventSignature(methodSignature);
     }
-
+    //构建方法签名
     static <T extends Type> String buildMethodSignature(
             String methodName, List<TypeReference<T>> parameters) {
 
         StringBuilder result = new StringBuilder();
+        //追加方法
         result.append(methodName);
+        //追加 （
         result.append("(");
+        //组合参数类型
         String params =
                 parameters.stream().map(p -> Utils.getTypeName(p)).collect(Collectors.joining(","));
         result.append(params);
         result.append(")");
         return result.toString();
     }
-
+    //构建事件签名
     public static String buildEventSignature(String methodSignature) {
+        //获得byte数组
         byte[] input = methodSignature.getBytes();
+        //转换Keccak-256 哈希值
         byte[] hash = Hash.sha3(input);
+        //转换hex
         return Numeric.toHexString(hash);
     }
 }

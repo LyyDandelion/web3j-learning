@@ -16,7 +16,10 @@ import java.util.List;
 
 import org.web3j.abi.datatypes.Type;
 
-/** Persisted solidity event parameters. */
+/**
+ * Persisted solidity event parameters.
+ * 持久的solidity事件参数
+ * */
 public class EventValues {
     private final List<Type> indexedValues;
     private final List<Type> nonIndexedValues;

@@ -21,7 +21,7 @@ import org.web3j.utils.Numeric;
  * Address type, which by default is equivalent to uint160 which follows the Ethereum specification.
  */
 public class Address implements Type<String> {
-
+    //类型名 address
     public static final String TYPE_NAME = "address";
     public static final int DEFAULT_LENGTH = 160;
     public static final Address DEFAULT = new Address(BigInteger.ZERO);

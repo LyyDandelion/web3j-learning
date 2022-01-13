@@ -14,7 +14,9 @@ package org.web3j.abi.datatypes;
 
 import java.math.BigInteger;
 
-/** Integer type. */
+/** Integer type.
+ * Integer 类型
+ * */
 public class Int extends IntType {
 
     public static final String TYPE_NAME = "int";

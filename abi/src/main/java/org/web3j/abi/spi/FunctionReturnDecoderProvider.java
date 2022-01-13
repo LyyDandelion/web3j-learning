@@ -16,5 +16,7 @@ import java.util.function.Supplier;
 
 import org.web3j.abi.FunctionReturnDecoder;
 
-/** Function decoding Service Provider Interface. */
+/** Function decoding Service Provider Interface.
+ *  函数解码服务提供者接口。 SPI
+ * */
 public interface FunctionReturnDecoderProvider extends Supplier<FunctionReturnDecoder> {}

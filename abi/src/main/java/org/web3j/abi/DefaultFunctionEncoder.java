@@ -40,10 +40,11 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
 
         final StringBuilder result = new StringBuilder();
         result.append(methodId);//将methodId追加进去
-
+        //编码参数
         return encodeParameters(parameters, result);
     }
 
+    //编码参数
     @Override
     public String encodeParameters(final List<Type> parameters) {
         return encodeParameters(parameters, new StringBuilder());
@@ -59,7 +60,7 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
         for (Type parameter : parameters) {
             //类型编码
             final String encodedValue = TypeEncoder.encode(parameter);
-
+            //类型是否为动态
             if (TypeEncoder.isDynamic(parameter)) {
                 final String encodedDataOffset =
                         TypeEncoder.encodeNumeric(new Uint(BigInteger.valueOf(dynamicDataOffset)));
@@ -75,10 +76,13 @@ public class DefaultFunctionEncoder extends FunctionEncoder {
         return result.toString();
     }
 
+    //获取长度
     @SuppressWarnings("unchecked")
     private static int getLength(final List<Type> parameters) {
         int count = 0;
+        //遍历
         for (final Type type : parameters) {
+            //是否为 静态数组类型
             if (type instanceof StaticArray
                     && StaticStruct.class.isAssignableFrom(
                             ((StaticArray) type).getComponentType())) {

@@ -122,6 +122,11 @@ import org.web3j.abi.datatypes.primitive.Short;
  * e.g. {@link java.lang.Short} for <code>int8</code>, <code>int16</code> and <code>uint8</code>;
  * {@link java.lang.Integer} for <code>int24</code>, <code>int32</code>, <code>uint16</code> and
  * <code>uint24</code>, etc.
+ *
+ * 将 Solidity 类型映射到 web3j 数据类型，允许对数字类型使用 Java 原始类型。这
+ * 使用的原始类型是可以保存特定位长度的 Solidity 值的最小类型，
+ * 例如 ： java.lang.Short ： int8 int16  uint8
+ *      java.lang.Integer： int24 int32 uint16 uint24
  */
 public final class AbiTypes {
     private AbiTypes() {}
@@ -129,8 +134,9 @@ public final class AbiTypes {
     /**
      * Returns the web3j data type for the given type, without using primitive types.
      *
-     * @param type A Solidity type.
-     * @return The web3j Java class to represent this Solidity type.
+     *  返回给定类型的 web3j 数据类型，替换solidity原始类型。
+     * @param type A Solidity type.   solidity 类型
+     * @return The web3j Java class to represent this Solidity type.  此 Solidity 类型表示的 web3j Java 类。
      */
     public static Class<? extends Type> getType(String type) {
         return getType(type, false);
@@ -141,8 +147,12 @@ public final class AbiTypes {
      *
      * Returns the web3j data type for the given type.
      *
-     * @param type A Solidity type. （solidity类型
+     * @param type A Solidity type.
+     *             solidity类型
+     *
      * @param primitives Use Java primitive types to wrap contract parameters.
+     *                   使用 Java 原始类型来包装合约参数。
+     *
      * @return The web3j Java class to represent this Solidity type.
      */
     @SuppressWarnings("unchecked")
@@ -381,6 +391,11 @@ public final class AbiTypes {
      * Returns the provided class type as a string. In case of a struct, it will return the struct
      * name. For the tuple notation of a struct, example ((string,uint256)), think of taking an
      * instance of the struct and calling the <code>instance.getTypeAsString()</code> method.
+     *
+     * 将提供的class类型作为字符串返回。如果是结构，它将返回结构
+     * 名称。对于结构的元组表示法，例如 ((string,uint256))，考虑采用
+     * 结构的实例并调用 <code>instance.getTypeAsString()</code> 方法。
+     *
      */
     public static String getTypeAString(Class<? extends Type> type) {
         if (Utf8String.class.equals(type)) {
