@@ -1,4 +1,5 @@
 // Abstract contract for the full ERC 20 Token standard
+//完整 ERC 20 代币标准的抽象合约
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
 pragma solidity ^0.4.20;
 

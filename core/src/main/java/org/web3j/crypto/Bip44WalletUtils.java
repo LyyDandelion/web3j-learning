@@ -16,12 +16,12 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.web3j.crypto.Bip32ECKeyPair.HARDENED_BIT;
-
+//BIP44钱包工具
 public class Bip44WalletUtils extends WalletUtils {
 
     /**
      * Generates a BIP-44 compatible Ethereum wallet on top of BIP-39 generated seed.
-     *
+     *在 BIP-39 生成的种子之上生成与 BIP-44 兼容的以太坊钱包。
      * @param password Will be used for both wallet encryption and passphrase for BIP-39 seed
      * @param destinationDirectory The directory containing the wallet
      * @return A BIP-39 compatible Ethereum wallet

@@ -27,7 +27,7 @@ import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 
 /**
- * <p>Auto generated code.
+ * <p>Auto generated code. 自动生成的代码 ，使用web3j命令行工具，或者使用 org.web3j.codegen.SolidityFunctionWrapperGenerator类 生成
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
@@ -36,30 +36,32 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Generated with web3j version 4.1.1.
  */
 public class ERC20 extends Contract {
+
+    //二进制文件
     private static final String BINARY = "Bin file was not provided";
-
+    //函数：name
     public static final String FUNC_NAME = "name";
-
+    //函数：approve
     public static final String FUNC_APPROVE = "approve";
-
+    //函数：totalSupply
     public static final String FUNC_TOTALSUPPLY = "totalSupply";
-
+    //函数：transferFrom
     public static final String FUNC_TRANSFERFROM = "transferFrom";
-
+    //函数：decimals
     public static final String FUNC_DECIMALS = "decimals";
-
+    //函数：balanceOf
     public static final String FUNC_BALANCEOF = "balanceOf";
-
+    //函数：symbol
     public static final String FUNC_SYMBOL = "symbol";
-
+    //函数：transfer
     public static final String FUNC_TRANSFER = "transfer";
-
+    //函数：allowance
     public static final String FUNC_ALLOWANCE = "allowance";
-
+    //事件：Transfer
     public static final Event TRANSFER_EVENT = new Event("Transfer", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
     ;
-
+    //事件：Approval
     public static final Event APPROVAL_EVENT = new Event("Approval", 
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
     ;
@@ -81,14 +83,14 @@ public class ERC20 extends Contract {
     protected ERC20(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
-
+    //获取token 名称
     public RemoteCall<String> name() {
         final Function function = new Function(FUNC_NAME, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
-
+    //授权
     public RemoteCall<TransactionReceipt> approve(String _spender, BigInteger _value) {
         final Function function = new Function(
                 FUNC_APPROVE, 
@@ -97,14 +99,14 @@ public class ERC20 extends Contract {
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
-
+    //总供应量
     public RemoteCall<BigInteger> totalSupply() {
         final Function function = new Function(FUNC_TOTALSUPPLY, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
-
+    //转账
     public RemoteCall<TransactionReceipt> transferFrom(String _from, String _to, BigInteger _value) {
         final Function function = new Function(
                 FUNC_TRANSFERFROM, 
@@ -114,28 +116,28 @@ public class ERC20 extends Contract {
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
-
+   //精度
     public RemoteCall<BigInteger> decimals() {
         final Function function = new Function(FUNC_DECIMALS, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint8>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
-
+    //查询余额
     public RemoteCall<BigInteger> balanceOf(String _owner) {
         final Function function = new Function(FUNC_BALANCEOF, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_owner)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
-
+    //token 符号
     public RemoteCall<String> symbol() {
         final Function function = new Function(FUNC_SYMBOL, 
                 Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Utf8String>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
-
+    //转账
     public RemoteCall<TransactionReceipt> transfer(String _to, BigInteger _value) {
         final Function function = new Function(
                 FUNC_TRANSFER, 
@@ -144,7 +146,7 @@ public class ERC20 extends Contract {
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
-
+    //授权量
     public RemoteCall<BigInteger> allowance(String _owner, String _spender) {
         final Function function = new Function(FUNC_ALLOWANCE, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_owner), 
@@ -152,7 +154,7 @@ public class ERC20 extends Contract {
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
-
+    //获取转账事件
     public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
