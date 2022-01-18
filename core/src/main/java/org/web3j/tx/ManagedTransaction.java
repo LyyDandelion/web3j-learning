@@ -22,7 +22,13 @@ import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 
-/** Generic transaction manager. */
+/**
+ *
+ * Generic transaction manager.
+ *
+ *
+ * 通用事务管理器
+ * */
 public abstract class ManagedTransaction {
 
     /**

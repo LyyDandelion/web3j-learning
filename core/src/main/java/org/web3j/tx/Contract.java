@@ -53,25 +53,32 @@ import static org.web3j.utils.RevertReasonExtractor.extractRevertReason;
 
 /**
  * Solidity contract type abstraction for interacting with smart contracts via native Java types.
+ * Solidity 合约类型抽象，用于通过本机 Java 类型与智能合约进行交互。
  */
 @SuppressWarnings({"WeakerAccess", "deprecation"})
 public abstract class Contract extends ManagedTransaction {
 
     // https://www.reddit.com/r/ethereum/comments/5g8ia6/attention_miners_we_recommend_raising_gas_limit/
-    /**
+    /** gas limit
      * @deprecated ...
      * @see org.web3j.tx.gas.DefaultGasProvider
      */
     public static final BigInteger GAS_LIMIT = BigInteger.valueOf(4_300_000);
 
     public static final String BIN_NOT_PROVIDED = "Bin file was not provided";
+    //函数：deploy
     public static final String FUNC_DEPLOY = "deploy";
-
+    //二进制合约
     protected final String contractBinary;
+    //合约地址
     protected String contractAddress;
+    //合约gas
     protected ContractGasProvider gasProvider;
+    //交易收据
     protected TransactionReceipt transactionReceipt;
+    //已部署地址
     protected Map<String, String> deployedAddresses;
+    //最新区块
     protected DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
 
     protected Contract(
@@ -178,7 +185,7 @@ public abstract class Contract extends ManagedTransaction {
                 gasPrice,
                 gasLimit);
     }
-
+    //设置合约地址
     public void setContractAddress(String contractAddress) {
         this.contractAddress = contractAddress;
     }
@@ -200,10 +207,11 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     /**
+     * 允许设置gasPrice
      * Allow {@code gasPrice} to be set.
      *
-     * @param newPrice gas price to use for subsequent transactions
-     * @deprecated use ContractGasProvider
+     * @param newPrice gas price to use for subsequent transactions  用于后续交易的 gas price
+     * @deprecated use ContractGasProvider  使用 ContractGasProvider
      */
     public void setGasPrice(BigInteger newPrice) {
         this.gasProvider = new StaticGasProvider(newPrice, gasProvider.getGasLimit());
@@ -211,7 +219,7 @@ public abstract class Contract extends ManagedTransaction {
 
     /**
      * Get the current {@code gasPrice} value this contract uses when executing transactions.
-     *
+     *获取此合约在执行交易时使用的当前 gasPrice 值。
      * @return the gas price set on this contract
      * @deprecated use ContractGasProvider
      */
@@ -222,6 +230,8 @@ public abstract class Contract extends ManagedTransaction {
     /**
      * Check that the contract deployed at the address associated with this smart contract wrapper
      * is in fact the contract you believe it is.
+     *
+     *  检查部署在与此智能合约包装器关联的地址的合约是否确实是您认为的合约。
      *
      * <p>This method uses the <a
      * href="https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getcode">eth_getCode</a> method to
@@ -265,15 +275,16 @@ public abstract class Contract extends ManagedTransaction {
      * the initial creation will be provided, e.g. via a <em>deploy</em> method. This will not
      * persist for Contracts instances constructed via a <em>load</em> method.
      *
-     * @return the TransactionReceipt generated at contract deployment
+     * @return the TransactionReceipt generated at contract deployment  合约部署时生成的 TransactionReceipt
      */
     public Optional<TransactionReceipt> getTransactionReceipt() {
         return Optional.ofNullable(transactionReceipt);
     }
 
     /**
-     * Sets the default block parameter. This use useful if one wants to query historical state of a
-     * contract.
+     * Sets the default block parameter. This use useful if one wants to query historical state of a contract.
+     *
+     * 设置默认块参数。如果要查询合约的历史状态，此用途很有用。
      *
      * @param defaultBlockParameter the default block parameter
      */

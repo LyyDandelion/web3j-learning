@@ -17,11 +17,18 @@ import java.util.List;
 
 import org.web3j.utils.Numeric;
 
-/** TransactionReceipt object used by {@link EthGetTransactionReceipt}. */
+/**
+ *  TransactionReceipt object used by {@link EthGetTransactionReceipt}.
+ *  交易收据对象
+ *  */
 public class TransactionReceipt {
+    //交易hash
     private String transactionHash;
+    //索引
     private String transactionIndex;
+    //区块hash
     private String blockHash;
+    //高度
     private String blockNumber;
     private String cumulativeGasUsed;
     private String gasUsed;
