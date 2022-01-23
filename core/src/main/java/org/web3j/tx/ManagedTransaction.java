@@ -85,6 +85,8 @@ public abstract class ManagedTransaction {
     /**
      * Return the current gas price from the ethereum node.
      *
+     * 从以太坊节点返回当前的 gas price。
+     *
      * <p>Note: this method was previously called {@code getGasPrice} but was renamed to distinguish
      * it when a bean accessor method on {@link Contract} was added with that name. If you have a
      * Contract subclass that is calling this method (unlikely since those classes are usually
@@ -101,6 +103,7 @@ public abstract class ManagedTransaction {
         return ethGasPrice.getGasPrice();
     }
 
+    //发送交易
     protected TransactionReceipt send(
             String to, String data, BigInteger value, BigInteger gasPrice, BigInteger gasLimit)
             throws IOException, TransactionException {
@@ -108,6 +111,7 @@ public abstract class ManagedTransaction {
         return transactionManager.executeTransaction(gasPrice, gasLimit, to, data, value);
     }
 
+    //发送EIP1559 交易
     protected TransactionReceipt sendEIP1559(
             long chainId,
             String to,
@@ -122,6 +126,15 @@ public abstract class ManagedTransaction {
                 chainId, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, data, value);
     }
 
+    /**
+     * 发送交易
+     * @param to  to,如果执行的合约交易则为合约地址
+     * @param data 数据
+     * @param value bnb
+     * @param gasPrice gas price
+     * @param gasLimit gas limit
+     * @param constructor 是否构造
+     */
     protected TransactionReceipt send(
             String to,
             String data,

@@ -24,7 +24,11 @@ import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.websocket.events.LogNotification;
 import org.web3j.protocol.websocket.events.NewHeadsNotification;
 
-/** The Flowables JSON-RPC client event API. */
+/**
+ * The Flowables JSON-RPC client event API.
+ *
+ * Flowables JSON-RPC 客户端事件 API。
+ * */
 public interface Web3jRx {
 
     /**

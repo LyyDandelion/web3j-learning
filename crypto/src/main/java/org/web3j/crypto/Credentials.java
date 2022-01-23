@@ -14,7 +14,11 @@ package org.web3j.crypto;
 
 import org.web3j.utils.Numeric;
 
-/** Credentials wrapper. */
+/**
+ *  Credentials wrapper.
+ *
+ *  凭证封装
+ * */
 public class Credentials {
 
     private final ECKeyPair ecKeyPair;

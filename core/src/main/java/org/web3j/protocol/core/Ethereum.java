@@ -70,7 +70,11 @@ import org.web3j.protocol.core.methods.response.admin.AdminDataDir;
 import org.web3j.protocol.core.methods.response.admin.AdminNodeInfo;
 import org.web3j.protocol.core.methods.response.admin.AdminPeers;
 
-/** Core Ethereum JSON-RPC API. */
+/**
+ *  Core Ethereum JSON-RPC API.
+ *
+ *  核心以太坊 JSON-RPC API。
+ * */
 public interface Ethereum {
     Request<?, Web3ClientVersion> web3ClientVersion();
 

@@ -190,14 +190,17 @@ public abstract class Contract extends ManagedTransaction {
         this.contractAddress = contractAddress;
     }
 
+    //获取合约地址
     public String getContractAddress() {
         return contractAddress;
     }
 
+    //设置交易收据
     public void setTransactionReceipt(TransactionReceipt transactionReceipt) {
         this.transactionReceipt = transactionReceipt;
     }
 
+    //获取二进制
     public String getContractBinary() {
         return contractBinary;
     }
@@ -275,6 +278,10 @@ public abstract class Contract extends ManagedTransaction {
      * the initial creation will be provided, e.g. via a <em>deploy</em> method. This will not
      * persist for Contracts instances constructed via a <em>load</em> method.
      *
+     *
+     * 如果此 Contract 实例是在部署时创建的，与关联的 TransactionReceipt 将提供初始创建
+     *
+     *
      * @return the TransactionReceipt generated at contract deployment  合约部署时生成的 TransactionReceipt
      */
     public Optional<TransactionReceipt> getTransactionReceipt() {
@@ -295,17 +302,23 @@ public abstract class Contract extends ManagedTransaction {
     /**
      * Execute constant function call - i.e. a call that does not change state of the contract
      *
+     * 执行常量函数调用——即不改变合约状态的调用
+     *
      * @param function to call
      * @return {@link List} of values returned by function call
      */
     private List<Type> executeCall(Function function) throws IOException {
+        //函数编码
         String encodedFunction = FunctionEncoder.encode(function);
 
+        //调用
         String value = call(contractAddress, encodedFunction, defaultBlockParameter);
 
+        //解码返回结果
         return FunctionReturnDecoder.decode(value, function.getOutputParameters());
     }
 
+    //执行调用返回单值
     @SuppressWarnings("unchecked")
     protected <T extends Type> T executeCallSingleValueReturn(Function function)
             throws IOException {
@@ -317,6 +330,7 @@ public abstract class Contract extends ManagedTransaction {
         }
     }
 
+    //执行调用返回单值
     @SuppressWarnings("unchecked")
     protected <T extends Type, R> R executeCallSingleValueReturn(
             Function function, Class<R> returnType) throws IOException {
@@ -340,21 +354,23 @@ public abstract class Contract extends ManagedTransaction {
                             + returnType.getSimpleName());
         }
     }
-
+    //调用返回多值
     protected List<Type> executeCallMultipleValueReturn(Function function) throws IOException {
         return executeCall(function);
     }
 
+    //执行交易
     protected TransactionReceipt executeTransaction(Function function)
             throws IOException, TransactionException {
         return executeTransaction(function, BigInteger.ZERO);
     }
-
+    //执行交易
     private TransactionReceipt executeTransaction(Function function, BigInteger weiValue)
             throws IOException, TransactionException {
         return executeTransaction(FunctionEncoder.encode(function), weiValue, function.getName());
     }
 
+    //执行交易
     TransactionReceipt executeTransaction(String data, BigInteger weiValue, String funcName)
             throws TransactionException, IOException {
 
@@ -363,7 +379,7 @@ public abstract class Contract extends ManagedTransaction {
 
     /**
      * Given the duration required to execute a transaction.
-     *
+     * 给定执行事务所需的持续时间。
      * @param data to send in transaction
      * @param weiValue in Wei to send in transaction
      * @return {@link Optional} containing our transaction receipt
@@ -382,7 +398,7 @@ public abstract class Contract extends ManagedTransaction {
                         gasProvider.getGasPrice(funcName),
                         gasProvider.getGasLimit(funcName),
                         constructor);
-
+        //交易返回失败
         if (!receipt.isStatusOK()) {
             throw new TransactionException(
                     String.format(
@@ -400,38 +416,41 @@ public abstract class Contract extends ManagedTransaction {
         return receipt;
     }
 
+    //远程调用返回单值
     protected <T extends Type> RemoteFunctionCall<T> executeRemoteCallSingleValueReturn(
             Function function) {
         return new RemoteFunctionCall<>(function, () -> executeCallSingleValueReturn(function));
     }
 
+    //远程调用返回单值
     protected <T> RemoteFunctionCall<T> executeRemoteCallSingleValueReturn(
             Function function, Class<T> returnType) {
         return new RemoteFunctionCall<>(
                 function, () -> executeCallSingleValueReturn(function, returnType));
     }
-
+    //远程调用返回多值
     protected RemoteFunctionCall<List<Type>> executeRemoteCallMultipleValueReturn(
             Function function) {
         return new RemoteFunctionCall<>(function, () -> executeCallMultipleValueReturn(function));
     }
-
+    //远程调用交易
     protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(
             Function function) {
         return new RemoteFunctionCall<>(function, () -> executeTransaction(function));
     }
-
+    //远程调用交易
     protected RemoteFunctionCall<TransactionReceipt> executeRemoteCallTransaction(
             Function function, BigInteger weiValue) {
         return new RemoteFunctionCall<>(function, () -> executeTransaction(function, weiValue));
     }
-
+    //创建合约
     private static <T extends Contract> T create(
             T contract, String binary, String encodedConstructor, BigInteger value)
             throws IOException, TransactionException {
+        //执行部署合约交易
         TransactionReceipt transactionReceipt =
                 contract.executeTransaction(binary + encodedConstructor, value, FUNC_DEPLOY, true);
-
+        //获取部署的合约地址
         String contractAddress = transactionReceipt.getContractAddress();
         if (contractAddress == null) {
             throw new RuntimeException("Empty contract address returned");
@@ -442,6 +461,7 @@ public abstract class Contract extends ManagedTransaction {
         return contract;
     }
 
+    //合约部署
     protected static <T extends Contract> T deploy(
             Class<T> type,
             Web3j web3j,
@@ -471,7 +491,7 @@ public abstract class Contract extends ManagedTransaction {
             throw new RuntimeException(e);
         }
     }
-
+    //合约部署
     protected static <T extends Contract> T deploy(
             Class<T> type,
             Web3j web3j,
@@ -545,7 +565,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor,
                 value);
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -567,7 +587,7 @@ public abstract class Contract extends ManagedTransaction {
                                 encodedConstructor,
                                 value));
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -586,7 +606,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor,
                 BigInteger.ZERO);
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -606,7 +626,7 @@ public abstract class Contract extends ManagedTransaction {
                                 encodedConstructor,
                                 value));
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -625,7 +645,7 @@ public abstract class Contract extends ManagedTransaction {
                                 encodedConstructor,
                                 BigInteger.ZERO));
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -647,7 +667,7 @@ public abstract class Contract extends ManagedTransaction {
                                 encodedConstructor,
                                 value));
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -666,7 +686,7 @@ public abstract class Contract extends ManagedTransaction {
                 encodedConstructor,
                 BigInteger.ZERO);
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -686,7 +706,7 @@ public abstract class Contract extends ManagedTransaction {
                                 encodedConstructor,
                                 value));
     }
-
+    //远程调用合约部署
     public static <T extends Contract> RemoteCall<T> deployRemoteCall(
             Class<T> type,
             Web3j web3j,
@@ -706,9 +726,13 @@ public abstract class Contract extends ManagedTransaction {
                                 BigInteger.ZERO));
     }
 
+    //提取事件参数
     public static EventValues staticExtractEventParameters(Event event, Log log) {
+        //获取topics
         final List<String> topics = log.getTopics();
+        //事件编码
         String encodedEventSignature = EventEncoder.encode(event);
+        //参数校验
         if (topics == null || topics.size() == 0 || !topics.get(0).equals(encodedEventSignature)) {
             return null;
         }
@@ -731,10 +755,11 @@ public abstract class Contract extends ManagedTransaction {
         return ensResolver.resolve(contractAddress);
     }
 
+    //提取事件参数
     protected EventValues extractEventParameters(Event event, Log log) {
         return staticExtractEventParameters(event, log);
     }
-
+    //提取事件参数
     protected List<EventValues> extractEventParameters(
             Event event, TransactionReceipt transactionReceipt) {
         return transactionReceipt.getLogs().stream()
@@ -742,7 +767,7 @@ public abstract class Contract extends ManagedTransaction {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
-
+    //从Log提取事件参数
     protected EventValuesWithLog extractEventParametersWithLog(Event event, Log log) {
         return staticExtractEventParametersWithLog(event, log);
     }
@@ -761,8 +786,8 @@ public abstract class Contract extends ManagedTransaction {
     }
 
     /**
-     * Subclasses should implement this method to return pre-existing addresses for deployed
-     * contracts.
+     * Subclasses should implement this method to return pre-existing addresses for deployed contracts.
+     * 子类应实现此方法以返回已部署合约的预先存在的地址。
      *
      * @param networkId the network id, for example "1" for the main-net, "3" for ropsten, etc.
      * @return the deployed address of the contract, if known, and null otherwise.
@@ -771,13 +796,14 @@ public abstract class Contract extends ManagedTransaction {
         return null;
     }
 
+    //设置部署的地址
     public final void setDeployedAddress(String networkId, String address) {
         if (deployedAddresses == null) {
             deployedAddresses = new HashMap<>();
         }
         deployedAddresses.put(networkId, address);
     }
-
+    //获取部署的地址
     public final String getDeployedAddress(String networkId) {
         String addr = null;
         if (deployedAddresses != null) {

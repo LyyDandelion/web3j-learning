@@ -29,11 +29,11 @@ import org.web3j.tx.response.TransactionReceiptProcessor;
 import static org.web3j.protocol.core.JsonRpc2_0Web3j.DEFAULT_BLOCK_TIME;
 
 /**
- * Transaction manager abstraction for executing transactions with Ethereum client via various
- * mechanisms.
+ * Transaction manager abstraction for executing transactions with Ethereum client via various mechanisms.
+ * 事务管理器抽象，用于通过各种机制与以太坊客户端执行事务。
  */
 public abstract class TransactionManager {
-
+    //每个 txHash 的默认轮询尝试次数
     public static final int DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH = 40;
     public static final long DEFAULT_POLLING_FREQUENCY = DEFAULT_BLOCK_TIME;
     public static final String REVERT_ERR_STR =
@@ -118,13 +118,13 @@ public abstract class TransactionManager {
                         constructor);
         return processResponse(ethSendTransaction);
     }
-
+    //发起交易
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice, BigInteger gasLimit, String to, String data, BigInteger value)
             throws IOException {
         return sendTransaction(gasPrice, gasLimit, to, data, value, false);
     }
-
+    //发起EIP1559交易
     public EthSendTransaction sendEIP1559Transaction(
             long chainId,
             BigInteger maxPriorityFeePerGas,
@@ -163,11 +163,12 @@ public abstract class TransactionManager {
 
     public abstract EthGetCode getCode(
             String contractAddress, DefaultBlockParameter defaultBlockParameter) throws IOException;
-
+    //获取from地址
     public String getFromAddress() {
         return fromAddress;
     }
 
+    //进程响应返回
     protected TransactionReceipt processResponse(EthSendTransaction transactionResponse)
             throws IOException, TransactionException {
         if (transactionResponse.hasError()) {
@@ -180,7 +181,7 @@ public abstract class TransactionManager {
 
         return transactionReceiptProcessor.waitForTransactionReceipt(transactionHash);
     }
-
+    //调用异常校验
     static void assertCallNotReverted(EthCall ethCall) {
         if (ethCall.isReverted()) {
             throw new ContractCallException(

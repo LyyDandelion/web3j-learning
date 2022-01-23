@@ -20,8 +20,8 @@ import org.web3j.protocol.Web3j;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 
 /**
- * Simple RawTransactionManager derivative that manages nonces to facilitate multiple transactions
- * per block.
+ * Simple RawTransactionManager derivative that manages nonces to facilitate multiple transactions per block.
+ * 简单的 RawTransactionManager 派生类，用于管理 nonce 以促进每个块的多个事务。
  */
 public class FastRawTransactionManager extends RawTransactionManager {
 
@@ -60,15 +60,15 @@ public class FastRawTransactionManager extends RawTransactionManager {
         }
         return nonce;
     }
-
+    //获取当前nonce
     public BigInteger getCurrentNonce() {
         return nonce;
     }
-
+    //重设nonce
     public synchronized void resetNonce() throws IOException {
         nonce = super.getNonce();
     }
-
+    //设置nonce
     public synchronized void setNonce(BigInteger value) {
         nonce = value;
     }

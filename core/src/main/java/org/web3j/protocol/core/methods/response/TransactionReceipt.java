@@ -170,6 +170,7 @@ public class TransactionReceipt {
         this.status = status;
     }
 
+    //成功状态
     public boolean isStatusOK() {
         if (null == getStatus()) {
             return true;

@@ -11,9 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 package org.web3j.tx;
-
+//链id
 public class ChainIdLong {
+    //无
     public static final long NONE = -1;
+    //主网
     public static final long MAINNET = 1;
     public static final long EXPANSE_MAINNET = 2;
     public static final long ROPSTEN = 3;

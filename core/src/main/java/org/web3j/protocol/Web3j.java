@@ -19,7 +19,11 @@ import org.web3j.protocol.core.Ethereum;
 import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.rx.Web3jRx;
 
-/** JSON-RPC Request object building factory. */
+/**
+ * JSON-RPC Request object building factory.
+ *
+ * JSON-RPC 请求对象构建工厂。
+ * */
 public interface Web3j extends Ethereum, Web3jRx, Batcher {
 
     /**

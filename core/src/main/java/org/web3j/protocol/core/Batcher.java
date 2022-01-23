@@ -12,6 +12,7 @@
  */
 package org.web3j.protocol.core;
 
+//批处理
 public interface Batcher {
 
     /**

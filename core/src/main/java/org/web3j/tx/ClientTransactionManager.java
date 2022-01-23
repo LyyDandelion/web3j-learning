@@ -25,18 +25,24 @@ import org.web3j.tx.response.TransactionReceiptProcessor;
 
 /**
  * TransactionManager implementation for using an Ethereum node to transact.
- *
+ *使用以太坊节点进行交易的 交易管理 实现。
  * <p><b>Note</b>: accounts must be unlocked on the node for transactions to be successful.
  */
 public class ClientTransactionManager extends TransactionManager {
 
     private final Web3j web3j;
-
+    //构造
     public ClientTransactionManager(Web3j web3j, String fromAddress) {
         super(web3j, fromAddress);
         this.web3j = web3j;
     }
 
+    /**构造
+     * @param web3j web3j对象
+     * @param fromAddress from
+     * @param attempts 交易收据获取尝试次数
+     * @param sleepDuration 获取尝试次数休眠时间
+     */
     public ClientTransactionManager(
             Web3j web3j, String fromAddress, int attempts, int sleepDuration) {
         super(web3j, attempts, sleepDuration, fromAddress);
@@ -51,6 +57,7 @@ public class ClientTransactionManager extends TransactionManager {
         this.web3j = web3j;
     }
 
+    //发起交易
     @Override
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice,
@@ -66,7 +73,7 @@ public class ClientTransactionManager extends TransactionManager {
 
         return web3j.ethSendTransaction(transaction).send();
     }
-
+    //发起EIP1155交易
     @Override
     public EthSendTransaction sendEIP1559Transaction(
             long chainId,

@@ -33,18 +33,24 @@ import org.web3j.utils.Numeric;
 import org.web3j.utils.TxHashVerifier;
 
 /**
- * TransactionManager implementation using Ethereum wallet file to create and sign transactions
- * locally.
+ * TransactionManager implementation using Ethereum wallet file to create and sign transactions locally.
+ *
+ * TransactionManager 实现使用以太坊钱包文件在本地创建和签署交易。
  *
  * <p>This transaction manager provides support for specifying the chain id for transactions as per
  * <a href="https://github.com/ethereum/EIPs/issues/155">EIP155</a>, as well as for locally signing
  * RawTransaction instances without broadcasting them.
+ *
+ * 该交易管理器支持根据 EIP155 为交易指定链 id，以及本地签名
+ * RawTransaction 实例而不广播它们。
+ *
  */
 public class RawTransactionManager extends TransactionManager {
-
+    //web3j对象
     private final Web3j web3j;
+    //凭证
     final Credentials credentials;
-
+    //链id
     private final long chainId;
 
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
