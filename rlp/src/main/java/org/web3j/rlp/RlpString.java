@@ -56,7 +56,7 @@ public class RlpString implements RlpType {
             return new RlpString(EMPTY);
         } else {
             byte[] bytes = value.toByteArray();
-            if (bytes[0] == 0) { // remove leading zero
+            if (bytes[0] == 0) { // remove leading zero 删除前导0
                 return new RlpString(Arrays.copyOfRange(bytes, 1, bytes.length));
             } else {
                 return new RlpString(bytes);

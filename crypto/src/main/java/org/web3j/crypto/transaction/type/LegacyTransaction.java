@@ -25,18 +25,27 @@ import org.web3j.utils.Numeric;
 import static org.web3j.crypto.transaction.type.TransactionType.LEGACY;
 
 /**
+ *
+ * 用于在本地签署交易的交易类。
+ *
  * Transaction class used for signing transactions locally.<br>
  * For the specification, refer to p4 of the <a href="http://gavwood.com/paper.pdf">yellow
  * paper</a>.
  */
 public class LegacyTransaction implements ITransaction {
-
+    //交易类型
     private TransactionType type;
+    //nonce
     private BigInteger nonce;
+    //gas price
     private BigInteger gasPrice;
+    //gas limit
     private BigInteger gasLimit;
+    //to 地址
     private String to;
+    //平台币数量
     private BigInteger value;
+    //数据
     private String data;
 
     public LegacyTransaction(
@@ -63,6 +72,7 @@ public class LegacyTransaction implements ITransaction {
         this.gasLimit = gasLimit;
         this.to = to;
         this.value = value;
+        //date去掉前缀‘0x’
         this.data = data != null ? Numeric.cleanHexPrefix(data) : null;
     }
 
@@ -76,6 +86,7 @@ public class LegacyTransaction implements ITransaction {
         result.add(RlpString.create(getGasLimit()));
 
         // an empty to address (contract creation) should not be encoded as a numeric 0 value
+        //空地址（合同创建）不应编码为数字 0 值
         String to = getTo();
         if (to != null && to.length() > 0) {
             // addresses that start with zeros should be encoded with the zeros included, not

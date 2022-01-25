@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.web3j.crypto.Sign;
 import org.web3j.rlp.RlpType;
-
+//交易接口
 public interface ITransaction {
 
     List<RlpType> asRlpValues(Sign.SignatureData signatureData);

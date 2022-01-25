@@ -38,10 +38,10 @@ public class TransactionEncoder {
 
         return encode(rawTransaction, signatureData);
     }
-
+    //签名消息
     public static byte[] signMessage(
             RawTransaction rawTransaction, long chainId, Credentials credentials) {
-
+        //如果是EIP1559的交易
         if (!rawTransaction.getType().equals(TransactionType.LEGACY)) {
             return signMessage(rawTransaction, credentials);
         }
@@ -79,8 +79,9 @@ public class TransactionEncoder {
     public static byte[] encode(RawTransaction rawTransaction) {
         return encode(rawTransaction, null);
     }
-
+    //编码
     public static byte[] encode(RawTransaction rawTransaction, long chainId) {
+
         Sign.SignatureData signatureData =
                 new Sign.SignatureData(longToBytes(chainId), new byte[] {}, new byte[] {});
         return encode(rawTransaction, signatureData);

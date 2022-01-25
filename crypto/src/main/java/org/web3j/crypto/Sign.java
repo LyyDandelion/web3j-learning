@@ -33,6 +33,7 @@ import static org.web3j.crypto.SignatureDataOperations.LOWER_REAL_V;
 import static org.web3j.utils.Assertions.verifyPrecondition;
 
 /**
+ * 交易签名逻辑。改编自 BitcoinJ ECKey 实现。
  * Transaction signing logic.
  *
  * <p>Adapted from the <a
@@ -40,7 +41,7 @@ import static org.web3j.utils.Assertions.verifyPrecondition;
  * BitcoinJ ECKey</a> implementation.
  */
 public class Sign {
-
+    //自定义命名曲线 secp256k1
     public static final X9ECParameters CURVE_PARAMS = CustomNamedCurves.getByName("secp256k1");
     static final ECDomainParameters CURVE =
             new ECDomainParameters(
@@ -49,7 +50,7 @@ public class Sign {
                     CURVE_PARAMS.getN(),
                     CURVE_PARAMS.getH());
     static final BigInteger HALF_CURVE_ORDER = CURVE_PARAMS.getN().shiftRight(1);
-
+    //消息前缀
     static final String MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
     static byte[] getEthereumMessagePrefix(int messageLength) {
@@ -69,7 +70,7 @@ public class Sign {
     public static SignatureData signPrefixedMessage(byte[] message, ECKeyPair keyPair) {
         return signMessage(getEthereumMessageHash(message), keyPair, false);
     }
-
+    //签名消息
     public static SignatureData signMessage(byte[] message, ECKeyPair keyPair) {
         return signMessage(message, keyPair, true);
     }

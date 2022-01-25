@@ -82,6 +82,7 @@ public class RawTransaction {
         return createTransaction(nonce, gasPrice, gasLimit, to, BigInteger.ZERO, data);
     }
 
+    //创建交易
     public static RawTransaction createTransaction(
             BigInteger nonce,
             BigInteger gasPrice,
@@ -93,7 +94,7 @@ public class RawTransaction {
         return new RawTransaction(
                 LegacyTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data));
     }
-
+    //创建交易
     public static RawTransaction createTransaction(
             long chainId,
             BigInteger nonce,

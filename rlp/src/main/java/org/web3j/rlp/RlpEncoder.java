@@ -19,6 +19,9 @@ import static org.web3j.rlp.RlpDecoder.OFFSET_SHORT_LIST;
 import static org.web3j.rlp.RlpDecoder.OFFSET_SHORT_STRING;
 
 /**
+ *
+ * 递归长度前缀 (RLP) 编码器。
+ *
  * Recursive Length Prefix (RLP) encoder.
  *
  * <p>For the specification, refer to p16 of the <a href="http://gavwood.com/paper.pdf">yellow

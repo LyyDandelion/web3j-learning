@@ -52,9 +52,9 @@ public class RawTransactionManager extends TransactionManager {
     final Credentials credentials;
     //链id
     private final long chainId;
-
+    //交易hash验证
     protected TxHashVerifier txHashVerifier = new TxHashVerifier();
-
+    //构造
     public RawTransactionManager(Web3j web3j, Credentials credentials, long chainId) {
         super(web3j, credentials.getAddress());
 
@@ -95,7 +95,7 @@ public class RawTransactionManager extends TransactionManager {
             Web3j web3j, Credentials credentials, int attempts, int sleepDuration) {
         this(web3j, credentials, ChainId.NONE, attempts, sleepDuration);
     }
-
+    //获取 nonce
     protected BigInteger getNonce() throws IOException {
         EthGetTransactionCount ethGetTransactionCount =
                 web3j.ethGetTransactionCount(
@@ -113,6 +113,8 @@ public class RawTransactionManager extends TransactionManager {
         this.txHashVerifier = txHashVerifier;
     }
 
+
+    //发起交易
     @Override
     public EthSendTransaction sendTransaction(
             BigInteger gasPrice,
@@ -122,12 +124,12 @@ public class RawTransactionManager extends TransactionManager {
             BigInteger value,
             boolean constructor)
             throws IOException {
-
+        //获取nonce
         BigInteger nonce = getNonce();
-
+        //创建交易
         RawTransaction rawTransaction =
                 RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data);
-
+        //签名并调用交易
         return signAndSend(rawTransaction);
     }
 
@@ -180,29 +182,34 @@ public class RawTransactionManager extends TransactionManager {
     }
 
     /*
+        签名
      * @param rawTransaction a RawTransaction istance to be signed
      * @return The transaction signed and encoded without ever broadcasting it
      */
     public String sign(RawTransaction rawTransaction) {
 
         byte[] signedMessage;
-
+        //指定链
         if (chainId > ChainId.NONE) {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, chainId, credentials);
         } else {
             signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
         }
-
+        //将签名消息转hex串
         return Numeric.toHexString(signedMessage);
     }
 
+    //签名并调用交易
     public EthSendTransaction signAndSend(RawTransaction rawTransaction) throws IOException {
+        //获取签名hex值
         String hexValue = sign(rawTransaction);
+        //调用web3j对象交易方法
         EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
 
         if (ethSendTransaction != null && !ethSendTransaction.hasError()) {
             String txHashLocal = Hash.sha3(hexValue);
             String txHashRemote = ethSendTransaction.getTransactionHash();
+            //将本地签名的hash与交易返回的hash对比验证是否相同。
             if (!txHashVerifier.verify(txHashLocal, txHashRemote)) {
                 throw new TxHashMismatchException(txHashLocal, txHashRemote);
             }
